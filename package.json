@@ -3,7 +3,10 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "pg": "^8.15.6",
+    "dotenv": "^16.5.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
