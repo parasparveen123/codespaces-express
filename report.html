@@ -2,157 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Student Management System - Reports</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 20px;
-    }
 
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+  
 
-    .section {
-      margin-bottom: 30px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: white;
-      padding: 15px;
-    }
-
-    .section h2 {
-      cursor: pointer;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border-radius: 5px;
-      margin-top: 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
 </head>
 <body>
 
-  <h1>🎓 Student Management System - Reports</h1>
+  <h1>Student Management System - Reports</h1>
 
-  <!-- Sections for each table -->
-  <div id="tables">
-    <!-- Each section will be dynamically inserted here -->
-  </div>
+  <h2>Departments</h2>
+  <table id="departmentsTable"></table>
+
+  <h2>Teachers</h2>
+  <table id="teachersTable"></table>
+
+  <h2>Students</h2>
+  <table id="studentsTable"></table>
+
+  <h2>Courses</h2>
+  <table id="coursesTable"></table>
+
+  <h2>Enrollments</h2>
+  <table id="enrollmentsTable"></table>
+
+  <h2>Grades</h2>
+  <table id="gradesTable"></table>
+
+  <h2>Course Prerequisites</h2>
+  <table id="prerequisitesTable"></table>
+
+  <h2>Course Materials</h2>
+  <table id="materialsTable"></table>
+
+  <h2>Exams</h2>
+  <table id="examsTable"></table>
+
+  <h2>Exam Results</h2>
+  <table id="examResultsTable"></table>
+
+  <h2>Timetables</h2>
+  <table id="timetablesTable"></table>
+
+  <h2>Feedback</h2>
+  <table id="feedbackTable"></table>
+
+  <h2>Staff</h2>
+  <table id="staffTable"></table>
 
   <script>
-    const apiBaseUrl = "https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev"; // Your running Node.js server
+    const apiBaseUrl = "https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev"; 
 
-    const tableEndpoints = [
-      { name: "Departments", endpoint: "/departments" },
-      { name: "Teachers", endpoint: "/teachers" },
-      { name: "Students", endpoint: "/students" },
-      { name: "Courses", endpoint: "/courses" },
-      { name: "Enrollments", endpoint: "/enrollments" },
-      { name: "Grades", endpoint: "/grades" },
-      { name: "Course Prerequisites", endpoint: "/prerequisites" },
-      { name: "Course Materials", endpoint: "/materials" },
-      { name: "Exams", endpoint: "/exams" },
-      { name: "Exam Results", endpoint: "/exam-results" },
-      { name: "Timetables", endpoint: "/timetables" },
-      { name: "Feedback", endpoint: "/feedback" },
-      { name: "Staff", endpoint: "/staff" }
-    ];
+    function createTableFromData(data, tableId) {
+      const table = document.getElementById(tableId);
 
-    async function fetchData(endpoint) {
-      debugger
-      try {
-        const response = await fetch(`${apiBaseUrl}${endpoint}`);
-        return await response.json();
-      } catch (error) {
-        console.error(`Error fetching ${endpoint}:`, error);
-        return [];
-      }
-    }
-
-    function createTable(data, container) {
-      if (!data.length) {
-        container.innerHTML = "<p>No data found.</p>";
-        return;
-      }
-
-      const table = document.createElement("table");
       const headers = Object.keys(data[0]);
 
       // Create header row
-      const thead = document.createElement("thead");
-      const trHead = document.createElement("tr");
+      let theadHTML = "<tr>";
       headers.forEach(col => {
-        const th = document.createElement("th");
-        th.textContent = col.replace(/_/g, " ").toUpperCase();
-        trHead.appendChild(th);
-      })
-      thead.appendChild(trHead);
-      table.appendChild(thead);
+        theadHTML += `<th>${col}</th>`;
+      });
+      theadHTML += "</tr>";
 
       // Create body rows
-      const tbody = document.createElement("tbody");
+      let tbodyHTML = "";
       data.forEach(row => {
-        const trBody = document.createElement("tr");
+        tbodyHTML += "<tr>";
         headers.forEach(col => {
-          const td = document.createElement("td");
-          td.textContent = row[col] || "";
-          trBody.appendChild(td);
+          tbodyHTML += `<td>${row[col]}</td>`;
         });
-        tbody.appendChild(trBody);
+        tbodyHTML += "</tr>";
       });
 
-      table.appendChild(tbody);
-      container.appendChild(table);
+      table.innerHTML = "<thead>" + theadHTML + "</thead><tbody>" + tbodyHTML + "</tbody>";
     }
 
-    async function loadTables() {
-      const container = document.getElementById("tables");
+    // Fetch and display each table
+    fetch(`${apiBaseUrl}/departments`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'departmentsTable'));
 
-      for (const table of tableEndpoints) {
-        const section = document.createElement("div");
-        section.className = "section";
+    fetch(`${apiBaseUrl}/teachers`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'teachersTable'));
 
-        const title = document.createElement("h2");
-        title.textContent = `${table.name}`;
-        section.appendChild(title);
+    fetch(`${apiBaseUrl}/students`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'studentsTable'));
 
-        const content = document.createElement("div");
-        content.style.display = "none";
-        section.appendChild(content);
+    fetch(`${apiBaseUrl}/courses`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'coursesTable'));
 
-        section.addEventListener("click", () => {
-          content.style.display = content.style.display === "none" ? "block" : "none";
-        });
+    fetch(`${apiBaseUrl}/enrollments`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'enrollmentsTable'));
 
-        container.appendChild(section);
+    fetch(`${apiBaseUrl}/grades`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'gradesTable'));
 
-        const data = await fetchData(table.endpoint);
-        createTable(data, content);
-      }
-    }
+    fetch(`${apiBaseUrl}/prerequisites`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'prerequisitesTable'));
 
-    window.onload = loadTables;
+    fetch(`${apiBaseUrl}/materials`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'materialsTable'));
+
+    fetch(`${apiBaseUrl}/exams`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'examsTable'));
+
+    fetch(`${apiBaseUrl}/exam-results`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'examResultsTable'));
+
+    fetch(`${apiBaseUrl}/timetables`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'timetablesTable'));
+
+    fetch(`${apiBaseUrl}/feedback`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'feedbackTable'));
+
+    fetch(`${apiBaseUrl}/staff`)
+      .then(res => res.json())
+      .then(data => createTableFromData(data, 'staffTable'));
   </script>
 
 </body>
