@@ -2,6 +2,12 @@ const express = require('express')
 const app = express()
 const port = 3000
 const db = require('./db');
+const cors = require('cors');
+
+
+app.use(cors()); 
+app.use(express.json());
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -9,6 +15,10 @@ app.get('/', (req, res) => {
 
 app.get('/report', (req, res) => {
   res.sendFile(__dirname + '/report.html'); 
+});
+
+app.get('/add-student', (req, res) => {
+  res.sendFile(__dirname + '/add-student.html'); 
 });
 
 app.listen(port, () => {
@@ -150,7 +160,7 @@ app.get('/staff', async (req, res) => {
 app.post('/departments', async (req, res) => {
   const { department_name } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO departments (department_name) VALUES ($1) RETURNING *',
       [department_name]
     );
@@ -164,7 +174,7 @@ app.post('/departments', async (req, res) => {
 app.post('/teachers', async (req, res) => {
   const { first_name, last_name, email, department_id } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO teachers (first_name, last_name, email, department_id) VALUES ($1, $2, $3, $4) RETURNING *',
       [first_name, last_name, email, department_id]
     );
@@ -178,7 +188,7 @@ app.post('/teachers', async (req, res) => {
 app.post('/students', async (req, res) => {
   const { first_name, last_name, date_of_birth, email } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO students (first_name, last_name, date_of_birth, email) VALUES ($1, $2, $3, $4) RETURNING *',
       [first_name, last_name, date_of_birth, email]
     );
@@ -192,7 +202,7 @@ app.post('/students', async (req, res) => {
 app.post('/courses', async (req, res) => {
   const { course_name, course_code, credits, department_id, teacher_id } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO courses (course_name, course_code, credits, department_id, teacher_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [course_name, course_code, credits, department_id, teacher_id]
     );
@@ -206,7 +216,7 @@ app.post('/courses', async (req, res) => {
 app.post('/enrollments', async (req, res) => {
   const { student_id, course_id } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO enrollments (student_id, course_id) VALUES ($1, $2) RETURNING *',
       [student_id, course_id]
     );
@@ -220,7 +230,7 @@ app.post('/enrollments', async (req, res) => {
 app.post('/grades', async (req, res) => {
   const { enrollment_id, grade } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO grades (enrollment_id, grade) VALUES ($1, $2) RETURNING *',
       [enrollment_id, grade]
     );
@@ -234,7 +244,7 @@ app.post('/grades', async (req, res) => {
 app.post('/prerequisites', async (req, res) => {
   const { course_id, prerequisite_course_id } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO course_prerequisites (course_id, prerequisite_course_id) VALUES ($1, $2) RETURNING *',
       [course_id, prerequisite_course_id]
     );
@@ -247,7 +257,7 @@ app.post('/prerequisites', async (req, res) => {
 app.post('/materials', async (req, res) => {
   const { course_id, title, file_url, uploaded_by } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO course_materials (course_id, title, file_url, uploaded_by) VALUES ($1, $2, $3, $4) RETURNING *',
       [course_id, title, file_url, uploaded_by]
     );
@@ -261,7 +271,7 @@ app.post('/materials', async (req, res) => {
 app.post('/exams', async (req, res) => {
   const { course_id, exam_name, exam_date, duration_minutes, max_score } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO exams (course_id, exam_name, exam_date, duration_minutes, max_score) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [course_id, exam_name, exam_date, duration_minutes, max_score]
     );
@@ -274,7 +284,7 @@ app.post('/exams', async (req, res) => {
 app.post('/results', async (req, res) => {
   const { exam_id, student_id, score, remarks } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO exam_results (exam_id, student_id, score, remarks) VALUES ($1, $2, $3, $4) RETURNING *',
       [exam_id, student_id, score, remarks]
     );
@@ -288,7 +298,7 @@ app.post('/results', async (req, res) => {
 app.post('/timetables', async (req, res) => {
   const { course_id, teacher_id, day_of_week, start_time, end_time, room_number } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO timetables (course_id, teacher_id, day_of_week, start_time, end_time, room_number) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [course_id, teacher_id, day_of_week, start_time, end_time, room_number]
     );
@@ -301,7 +311,7 @@ app.post('/timetables', async (req, res) => {
 app.post('/feedback', async (req, res) => {
   const { student_id, teacher_id, course_id, rating, comment } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO feedback (student_id, teacher_id, course_id, rating, comment) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [student_id, teacher_id, course_id, rating, comment]
     );
@@ -314,7 +324,7 @@ app.post('/feedback', async (req, res) => {
 app.post('/staff', async (req, res) => {
   const { first_name, last_name, role, email, department_id } = req.body;
   try {
-    const result = await dbQuery(
+    const result = await db.query(
       'INSERT INTO staff (first_name, last_name, role, email, department_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [first_name, last_name, role, email, department_id]
     );

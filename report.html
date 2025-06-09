@@ -51,7 +51,7 @@
   <table id="staffTable"></table>
 
   <script>
-    const apiBaseUrl = "https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev"; 
+    const apiBaseUrl = "https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev/teachers"; 
 
     function createTableFromData(data, tableId) {
       const table = document.getElementById(tableId);
@@ -70,7 +70,7 @@
       data.forEach(row => {
         tbodyHTML += "<tr>";
         headers.forEach(col => {
-          tbodyHTML += `<td>${row[col]}</td>`;
+          tbodyHTML += `<td>${row[col] || ""}</td>`;
         });
         tbodyHTML += "</tr>";
       });
