@@ -7,6 +7,11 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+// Serve the HTML report
+app.get('/report', (req, res) => {
+  res.sendFile(__dirname + '/report.html'); // assumes report.html is in same folder as server.js
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
