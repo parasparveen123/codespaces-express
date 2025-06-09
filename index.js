@@ -145,3 +145,181 @@ app.get('/staff', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+app.post('/departments', async (req, res) => {
+  const { department_name } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO departments (department_name) VALUES ($1) RETURNING *',
+      [department_name]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/teachers', async (req, res) => {
+  const { first_name, last_name, email, department_id } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO teachers (first_name, last_name, email, department_id) VALUES ($1, $2, $3, $4) RETURNING *',
+      [first_name, last_name, email, department_id]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/students', async (req, res) => {
+  const { first_name, last_name, date_of_birth, email } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO students (first_name, last_name, date_of_birth, email) VALUES ($1, $2, $3, $4) RETURNING *',
+      [first_name, last_name, date_of_birth, email]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/courses', async (req, res) => {
+  const { course_name, course_code, credits, department_id, teacher_id } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO courses (course_name, course_code, credits, department_id, teacher_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [course_name, course_code, credits, department_id, teacher_id]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/enrollments', async (req, res) => {
+  const { student_id, course_id } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO enrollments (student_id, course_id) VALUES ($1, $2) RETURNING *',
+      [student_id, course_id]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/grades', async (req, res) => {
+  const { enrollment_id, grade } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO grades (enrollment_id, grade) VALUES ($1, $2) RETURNING *',
+      [enrollment_id, grade]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/prerequisites', async (req, res) => {
+  const { course_id, prerequisite_course_id } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO course_prerequisites (course_id, prerequisite_course_id) VALUES ($1, $2) RETURNING *',
+      [course_id, prerequisite_course_id]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/materials', async (req, res) => {
+  const { course_id, title, file_url, uploaded_by } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO course_materials (course_id, title, file_url, uploaded_by) VALUES ($1, $2, $3, $4) RETURNING *',
+      [course_id, title, file_url, uploaded_by]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/exams', async (req, res) => {
+  const { course_id, exam_name, exam_date, duration_minutes, max_score } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO exams (course_id, exam_name, exam_date, duration_minutes, max_score) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [course_id, exam_name, exam_date, duration_minutes, max_score]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/results', async (req, res) => {
+  const { exam_id, student_id, score, remarks } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO exam_results (exam_id, student_id, score, remarks) VALUES ($1, $2, $3, $4) RETURNING *',
+      [exam_id, student_id, score, remarks]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post('/timetables', async (req, res) => {
+  const { course_id, teacher_id, day_of_week, start_time, end_time, room_number } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO timetables (course_id, teacher_id, day_of_week, start_time, end_time, room_number) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [course_id, teacher_id, day_of_week, start_time, end_time, room_number]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/feedback', async (req, res) => {
+  const { student_id, teacher_id, course_id, rating, comment } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO feedback (student_id, teacher_id, course_id, rating, comment) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [student_id, teacher_id, course_id, rating, comment]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/staff', async (req, res) => {
+  const { first_name, last_name, role, email, department_id } = req.body;
+  try {
+    const result = await dbQuery(
+      'INSERT INTO staff (first_name, last_name, role, email, department_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [first_name, last_name, role, email, department_id]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
