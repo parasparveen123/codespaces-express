@@ -1,0 +1,124 @@
+erDiagram
+    departments ||--o{ teachers : "1..*"
+    teachers ||--o{ courses : "1..*"
+    students ||--o{ enrollments : "1..*"
+    courses ||--o{ enrollments : "1..*"
+    enrollments ||--o{ grades : "1..1"
+    courses ||--o{ course_prerequisites : "1..*"
+    courses ||--o{ course_materials : "1..*"
+    teachers ||--o{ course_materials : "1..*"
+    courses ||--o{ exams : "1..*"
+    exams ||--o{ exam_results : "1..*"
+    students ||--o{ exam_results : "1..*"
+    courses ||--o{ timetables : "1..*"
+    teachers ||--o{ timetables : "1..*"
+    students ||--o{ feedback : "1..*"
+    teachers ||--o{ feedback : "1..*"
+    courses ||--o{ feedback : "1..*"
+    departments ||--o{ staff : "1..*"
+
+    departments {
+        int department_id PK
+        varchar department_name
+    }
+
+    teachers {
+        int teacher_id PK
+        varchar first_name
+        varchar last_name
+        varchar email
+        int department_id FK
+    }
+
+    students {
+        int student_id PK
+        varchar first_name
+        varchar last_name
+        date date_of_birth
+        varchar email
+        date enrollment_date
+    }
+
+    courses {
+        int course_id PK
+        varchar course_name
+        varchar course_code
+        int credits
+        int department_id FK
+        int teacher_id FK
+    }
+
+    enrollments {
+        int enrollment_id PK
+        int student_id FK
+        int course_id FK
+        date enrollment_date
+    }
+
+    grades {
+        int grade_id PK
+        int enrollment_id FK
+        char grade
+        timestamp graded_at
+    }
+
+    course_prerequisites {
+        int course_id FK
+        int prerequisite_course_id FK
+    }
+
+    course_materials {
+        int material_id PK
+        int course_id FK
+        varchar title
+        text file_url
+        timestamp uploaded_at
+        int uploaded_by FK
+    }
+
+    exams {
+        int exam_id PK
+        int course_id FK
+        varchar exam_name
+        date exam_date
+        int duration_minutes
+        int max_score
+    }
+
+    exam_results {
+        int result_id PK
+        int exam_id FK
+        int student_id FK
+        int score
+        text remarks
+        timestamp recorded_at
+    }
+
+    timetables {
+        int timetable_id PK
+        int course_id FK
+        int teacher_id FK
+        varchar day_of_week
+        time start_time
+        time end_time
+        varchar room_number
+    }
+
+    feedback {
+        int feedback_id PK
+        int student_id FK
+        int teacher_id FK
+        int course_id FK
+        int rating
+        text comment
+        timestamp submitted_at
+    }
+
+    staff {
+        int staff_id PK
+        varchar first_name
+        varchar last_name
+        varchar role
+        varchar email
+        int department_id FK
+    }

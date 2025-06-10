@@ -54,38 +54,7 @@
         datasets: [{
           label: 'Number of Students Enrolled',
           data: chartData,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
         }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Course Enrollment Summary'
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { stepSize: 1 },
-            title: {
-              display: true,
-              text: 'Number of Students'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Course Name'
-            }
-          }
-        }
       }
     });
 
@@ -93,10 +62,17 @@
     const gradesRes = await fetch(`${apiBaseUrl}/grades`);
     const grades = await gradesRes.json();
 
-    const gradeCountMap = {};
-    grades.forEach(g => {
-      gradeCountMap[g.grade] = (gradeCountMap[g.grade] || 0) + 1;
-    });
+const gradeCountMap = {};
+
+  grades.forEach(g => {
+    const currentGrade = g.grade;
+
+    if (gradeCountMap[currentGrade] === undefined) {
+      gradeCountMap[currentGrade] = 0;
+    }
+
+    gradeCountMap[currentGrade] = gradeCountMap[currentGrade] + 1;
+  });
 
     const ctx2 = document.getElementById('gradeDistributionChart').getContext('2d');
     new Chart(ctx2, {
@@ -106,15 +82,11 @@
         datasets: [{
           label: 'Grades',
           data: Object.values(gradeCountMap),
-          backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#9C9CFF', '#FFEEAD'],
-          hoverOffset: 10
         }]
       },
       options: {
-        responsive: true,
         plugins: {
           title: {
-            display: true,
             text: 'Grade Distribution'
           }
         }
