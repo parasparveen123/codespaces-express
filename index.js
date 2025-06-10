@@ -2,10 +2,10 @@ const express = require('express')
 const app = express()
 const port = 3000
 const db = require('./db');
-const cors = require('cors');
 
 
-app.use(cors()); 
+
+//app.use(cors()); 
 app.use(express.json());
 
 
@@ -27,6 +27,10 @@ app.get('/add-teacher', (req, res) => {
 app.get('/add-staff', (req, res) => {
   res.sendFile(__dirname + '/add-staff.html'); 
 });
+app.get('/add-course', (req, res) => {
+  res.sendFile(__dirname + '/add-course.html'); 
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
@@ -235,7 +239,9 @@ app.post('/enrollments', async (req, res) => {
 
 
 app.post('/grades', async (req, res) => {
-  const { enrollment_id, grade } = req.body;
+  const enrollment_id = req.body["enrollment_id"];
+    const grade = req.body["grade"];
+
   try {
     const result = await db.query(
       'INSERT INTO grades (enrollment_id, grade) VALUES ($1, $2) RETURNING *',

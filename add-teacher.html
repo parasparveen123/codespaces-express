@@ -79,7 +79,7 @@
           throw new Error(result.error || "Failed to add teacher.");
         }
 
-        showMessage("✅ Teacher added successfully!", "success");
+        showMessage("Teacher added successfully!", "success");
         document.getElementById('teacherForm').reset();
       } catch (err) {
         showMessage(" Error: " + err.message, "danger");
