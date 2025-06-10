@@ -83,11 +83,11 @@
           throw new Error(result.error || "Unknown error");
         }
 
-        showMessage("✅ Course added successfully!", "success");
+        showMessage(" Course added successfully!", "success");
         document.getElementById('courseForm').reset();
       } catch (err) {
         console.error("Fetch error:", err); // 👈 Log full error
-        showMessage("❌ Error: " + err.message, "danger");
+        showMessage(" Error: " + err.message, "danger");
       }
     });
 
