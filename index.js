@@ -21,6 +21,13 @@ app.get('/add-student', (req, res) => {
   res.sendFile(__dirname + '/add-student.html'); 
 });
 
+app.get('/add-teacher', (req, res) => {
+  res.sendFile(__dirname + '/add-teacher.html'); 
+});
+app.get('/add-staff', (req, res) => {
+  res.sendFile(__dirname + '/add-staff.html'); 
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

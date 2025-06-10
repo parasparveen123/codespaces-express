@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add New Staff</title>
+  <!-- Bootstrap for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"  rel="stylesheet" />
+</head>
+<body class="bg-light">
+
+  <div class="container py-5">
+    <h2 class="mb-4">🧾 Add New Staff Member</h2>
+
+    <form id="staffForm" class="bg-white p-4 rounded shadow-sm">
+      <div class="mb-3">
+        <label for="firstName" class="form-label">First Name *</label>
+        <input type="text" class="form-control" id="firstName" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="lastName" class="form-label">Last Name *</label>
+        <input type="text" class="form-control" id="lastName" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="role" class="form-label">Role *</label>
+        <input type="text" class="form-control" id="role" placeholder="e.g., Librarian, Admin" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email (Optional)</label>
+        <input type="email" class="form-control" id="email">
+      </div>
+
+      <div class="mb-3">
+        <label for="departmentId" class="form-label">Department ID (Optional)</label>
+        <input type="number" class="form-control" id="departmentId" min="1">
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Add Staff</button>
+    </form>
+
+    <div id="responseMessage" class="mt-4"></div>
+  </div>
+
+  <script>
+    document.getElementById('staffForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const staffData = {
+        first_name: document.getElementById('firstName').value.trim(),
+        last_name: document.getElementById('lastName').value.trim(),
+        role: document.getElementById('role').value.trim(),
+        email: document.getElementById('email').value.trim() || null,
+        department_id: parseInt(document.getElementById('departmentId').value) || null
+      };
+
+      // Basic validation
+      if (!staffData.first_name || !staffData.last_name || !staffData.role) {
+        showMessage("Please fill in all required fields.", "danger");
+        return;
+      }
+
+      try {
+        const response = await fetch('https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev/staff', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(staffData)
+        });
+
+        const text = await response.text(); // Read raw response
+
+        let result;
+        try {
+          result = JSON.parse(text);
+        } catch {
+          showMessage("Invalid response from server.", "danger");
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(result.error || "Failed to add staff.");
+        }
+
+        showMessage("✅ Staff member added successfully!", "success");
+        document.getElementById('staffForm').reset();
+      } catch (err) {
+        console.error("Fetch error:", err); // 👈 Log full error
+        showMessage("❌ Error: " + err.message, "danger");
+      }
+    });
+
+    function showMessage(message, type) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `alert alert-${type}`;
+      messageDiv.textContent = message;
+
+      const container = document.getElementById('responseMessage');
+      container.innerHTML = '';
+      container.appendChild(messageDiv);
+
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>
