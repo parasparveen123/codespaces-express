@@ -21,7 +21,6 @@
 
     const apiBaseUrl = "https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev"; 
 
-
     const [enrollmentsRes, coursesRes] = await Promise.all([
       fetch(`${apiBaseUrl}/enrollments`),
       fetch(`${apiBaseUrl}/courses`)
@@ -85,6 +84,38 @@
               display: true,
               text: 'Course Name'
             }
+          }
+        }
+      }
+    });
+
+
+    const gradesRes = await fetch(`${apiBaseUrl}/grades`);
+    const grades = await gradesRes.json();
+
+    const gradeCountMap = {};
+    grades.forEach(g => {
+      gradeCountMap[g.grade] = (gradeCountMap[g.grade] || 0) + 1;
+    });
+
+    const ctx2 = document.getElementById('gradeDistributionChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'pie',
+      data: {
+        labels: Object.keys(gradeCountMap),
+        datasets: [{
+          label: 'Grades',
+          data: Object.values(gradeCountMap),
+          backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#9C9CFF', '#FFEEAD'],
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Grade Distribution'
           }
         }
       }
