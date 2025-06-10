@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎓 Student Management System</title>
+  <!-- Bootstrap for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"  rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 40px;
+    }
+
+    .dashboard-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card-link:hover {
+      transform: scale(1.02);
+      transition: all 0.2s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="dashboard-title">Student Management System</h1>
+
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <a href="report" class="card-link">
+          <div class="card bg-primary text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">View Reports</h5>
+              <p class="card-text">See data tables</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="chart" class="card-link">
+          <div class="card bg-primary text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">View Charts</h5>
+              <p class="card-text">See charts</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+
+      <div class="col-md-4">
+        <a href="add-student" class="card-link">
+          <div class="card bg-success text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">Add New Student</h5>
+              <p class="card-text">Register a new student in the system</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="add-teacher" class="card-link">
+          <div class="card bg-info text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">Add New Teacher</h5>
+              <p class="card-text">Add faculty members to departments</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="add-course" class="card-link">
+          <div class="card bg-warning text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">Add New Course</h5>
+              <p class="card-text">Create course offerings with credits</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="add-staff" class="card-link">
+          <div class="card bg-secondary text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">Add Staff Member</h5>
+              <p class="card-text">Add non-teaching staff (admin, librarian)</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="add-enrollment" class="card-link">
+          <div class="card bg-danger text-white h-100">
+            <div class="card-body text-center">
+              <h5 class="card-title">Enroll Student</h5>
+              <p class="card-text">Enroll students in courses</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

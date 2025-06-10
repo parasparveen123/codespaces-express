@@ -10,7 +10,7 @@ app.use(express.json());
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.sendFile(__dirname + '/index.html');
 })
 
 app.get('/report', (req, res) => {
@@ -33,6 +33,10 @@ app.get('/add-staff', (req, res) => {
 });
 app.get('/add-course', (req, res) => {
   res.sendFile(__dirname + '/add-course.html'); 
+});
+
+app.get('/add-enrollment', (req, res) => {
+  res.sendFile(__dirname + '/add-enrollment.html'); 
 });
 
 
