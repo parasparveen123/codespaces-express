@@ -17,6 +17,10 @@ app.get('/report', (req, res) => {
   res.sendFile(__dirname + '/report.html'); 
 });
 
+app.get('/chart', (req, res) => {
+  res.sendFile(__dirname + '/chart.html'); 
+});
+
 app.get('/add-student', (req, res) => {
   res.sendFile(__dirname + '/add-student.html'); 
 });

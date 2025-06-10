@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Management System - Charts</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+
+</head>
+<body>
+
+  <h1>Student Management System - Charts</h1>
+
+<div style="max-width: 800px; margin: auto;">
+  <canvas id="courseEnrollmentChart" height="100"></canvas>
+  <canvas id="gradeDistributionChart" height="100"></canvas>
+</div>
+
+  <script>
+   
+  window.onload = async () => {
+
+    const apiBaseUrl = "https://glorious-funicular-g4pj6g99xx9cpgxx-3000.app.github.dev"; 
+
+
+    const [enrollmentsRes, coursesRes] = await Promise.all([
+      fetch(`${apiBaseUrl}/enrollments`),
+      fetch(`${apiBaseUrl}/courses`)
+    ]);
+
+    const enrollments = await enrollmentsRes.json();
+    const courses = await coursesRes.json();
+
+    // Map course_id → course_name
+    const courseMap = {};
+    courses.forEach(c => {
+      courseMap[c.course_id] = c.course_name;
+    });
+
+    // Count enrollments per course
+    const courseCountMap = {};
+    enrollments.forEach(e => {
+      const courseId = e.course_id;
+      courseCountMap[courseId] = (courseCountMap[courseId] || 0) + 1;
+    });
+
+    // Prepare chart data
+    const chartLabels = Object.keys(courseCountMap).map(id => courseMap[id] || `Course ${id}`);
+    const chartData = Object.values(courseCountMap);
+
+    const ctx1 = document.getElementById('courseEnrollmentChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: 'Number of Students Enrolled',
+          data: chartData,
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Course Enrollment Summary'
+          },
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1 },
+            title: {
+              display: true,
+              text: 'Number of Students'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Course Name'
+            }
+          }
+        }
+      }
+    });
+
+   
+  };
+</script>
+
+</body>
+</html>
